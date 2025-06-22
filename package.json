@@ -4,7 +4,9 @@
   "description": "Mock database for practicing SQL queries",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:seed": "npx sequelize-cli db:seed"
   },
   "repository": {
     "type": "git",
@@ -17,5 +19,12 @@
   "bugs": {
     "url": "https://github.com/AlexandreResende/mock-database/issues"
   },
-  "homepage": "https://github.com/AlexandreResende/mock-database#readme"
+  "homepage": "https://github.com/AlexandreResende/mock-database#readme",
+  "dependencies": {
+    "sequelize": "^6.37.7",
+    "sequelize-cli": "^6.6.3"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.8.0"
+  }
 }
