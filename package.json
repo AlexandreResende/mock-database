@@ -8,7 +8,8 @@
     "db:migrate": "npx sequelize-cli db:migrate",
     "db:migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
     "db:seed": "npx sequelize-cli db:seed",
-    "create:users": "node ./src/scripts/postgres/createUsers.js"
+    "create:users": "node ./src/scripts/postgres-scripts/createUsers.js",
+    "create:products": "node ./src/scripts/postgres-scripts/createProducts.js"
   },
   "repository": {
     "type": "git",
