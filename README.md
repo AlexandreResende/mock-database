@@ -34,8 +34,7 @@ Below are the schema of the tables:
 
 > products  
 
-- id PK  
-- order_id FK  
+- id PK   
 - name  
 - description  
 - price  
