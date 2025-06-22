@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:migrate": "npx sequelize-cli db:migrate",
     "db:migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
-    "db:seed": "npx sequelize-cli db:seed"
+    "db:seed": "npx sequelize-cli db:seed",
+    "create:users": "node ./src/scripts/postgres/createUsers.js"
   },
   "repository": {
     "type": "git",
