@@ -13,11 +13,10 @@ practicing queries there too.
 
 ## Structure of the SQL DB
 
-There will be initially two table. The first one will be a    
-user's table and the second one will be an orders table.    
-We could increase the complexity with a products table but    
-this may happen in the future, not for now.    
-Below are the schema of the tables
+There will be initially four tables. The first one will be a    
+user's table, the second one will be an orders table, the    
+third one will be a products table and the last one a order_items table.          
+Below are the schema of the tables:    
 
 > users    
 
@@ -31,7 +30,23 @@ Below are the schema of the tables
 - id PK    
 - user_id FK    
 - order_date    
-- amount    
+- amount($)  
+
+> products  
+
+- id PK  
+- order_id FK  
+- name  
+- description  
+- price  
+
+> order_items
+
+- id PK  
+- order_id FK  
+- product_id FK  
+- quantity  
+- price  
 
 ## Schema of the NoSQL DB
 
@@ -46,7 +61,12 @@ everything will reside in the same document.
 - created_at 
 - orders
   - order_date    
-  - amount    
+  - amount 
+  - products
+    - id
+    - name
+    - description   
+    - price    
 
 ## Queries that will be made on DBs
 
