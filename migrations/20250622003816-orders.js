@@ -16,7 +16,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      order_date: {
+      orderDate: {
         type: Sequelize.DATE,
         allowNull: false,
       },
@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.DOUBLE,
         allowNull: false
       },
-      user_id: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -33,7 +33,9 @@ module.exports = {
           },
           key: 'id',
         }
-      }
+      },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE
     });
   },
 

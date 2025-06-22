@@ -16,7 +16,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      order_id: {
+      orderId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -26,7 +26,7 @@ module.exports = {
           key: 'id',
         }
       },
-      product_id: {
+      productId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -40,10 +40,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      total_price: {
+      totalPrice: {
         type: Sequelize.DOUBLE,
         allowNull: false,
-      }
+      },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE
     });
   },
 

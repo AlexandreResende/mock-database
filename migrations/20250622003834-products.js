@@ -27,7 +27,9 @@ module.exports = {
       price: {
         type: Sequelize.DOUBLE,
         allowNull: false,
-      }
+      },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE
     });
   },
 
