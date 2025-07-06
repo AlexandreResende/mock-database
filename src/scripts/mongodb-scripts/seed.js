@@ -8,7 +8,7 @@ const { generateOrdersForUser } = require('./utils/generateOrdersForUser');
   const client = await getConnection();
   const collection = client.db().collection('users');
 
-  const amountOfUsers = 2;
+  const amountOfUsers = 150;
 
   for (let count = 0; count < amountOfUsers; count++) {
     let userId = uuidv4();
