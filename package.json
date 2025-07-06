@@ -9,7 +9,8 @@
     "db:migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
     "db:seed": "npx sequelize-cli db:seed",
     "create:users": "node ./src/scripts/postgres-scripts/createUsers.js",
-    "create:products": "node ./src/scripts/postgres-scripts/createProducts.js"
+    "create:products": "node ./src/scripts/postgres-scripts/createProducts.js",
+    "mongo:seed": "node ./src/scripts/mongodb-scripts/seed.js"
   },
   "repository": {
     "type": "git",
@@ -24,9 +25,11 @@
   },
   "homepage": "https://github.com/AlexandreResende/mock-database#readme",
   "dependencies": {
+    "mongodb": "^6.17.0",
     "pg": "^8.16.2",
     "sequelize": "^6.37.7",
-    "sequelize-cli": "^6.6.3"
+    "sequelize-cli": "^6.6.3",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.8.0"

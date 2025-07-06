@@ -65,6 +65,7 @@ everything will reside in the same document.
     - id
     - name
     - description   
+    - quantity    
     - price    
 
 ## Queries that will be made on DBs

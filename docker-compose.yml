@@ -4,7 +4,7 @@ services:
   postgres_db:
     container_name: "postgres_db_mockdatabaseproject"
     image: postgres:16.1
-    restart: always
+    restart: "no"
     environment:
       - POSTGRES_DB=store
       - POSTGRES_USER=admin
@@ -18,7 +18,7 @@ services:
   mongo_db:
     container_name: "mongo_db_mockdatabaseproject"
     image: mongo
-    restart: always
+    restart: "no"
     ports:
       - "27017:27017"
     environment:
