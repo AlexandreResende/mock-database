@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const { faker } = require('@faker-js/faker');
 
 const { generateProductsForOrder } = require("./generateProductsForOrder");
 
