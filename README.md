@@ -111,3 +111,39 @@ everything will reside in the same document.
 - Find the most common order amount.    
 - Identify users who have referred others and track their orders.    
 
+## Queries for the NOSQL DB
+
+- Retrieve All Users
+- Find a User by Username
+- Get Users Created After a Certain Date
+- Count Total Users
+- Retrieve Orders for a Specific User
+- Find Users with Specific Product in Orders
+- Calculate Total Amount Spent by a User
+- List All Products Ordered by All Users
+- Find Users with No Orders
+- Update User Email
+- Delete a User
+- Find Total Number of Orders for Each User
+- Find Users with Orders Exceeding a Certain Amount
+- Get Users Who Ordered a Specific Product in a Date Range
+- Aggregate Total Amount Spent by Each User and Sort
+- Find Users with Multiple Orders for the Same Product
+- Update Multiple User Emails Based on a Condition
+- Find Users with Orders Containing a Specific Keyword in Product Description
+- Calculate Average Order Amount for Each User
+- Retrieve Users with Orders in the Last Month and Group by Product
+- Find Users with the Most Orders
+- Delete All Orders for a Specific User
+- Find Users Who Have Ordered All Products in a Given List
+- Get Users with Orders That Have a Total Quantity Exceeding a Certain Value
+- Calculate Total Revenue Generated from Each Product
+- Find Users Who Have Not Ordered in the Last Year
+- Retrieve Users with Orders That Have a Specific Shipping Method
+- Find Users with Orders That Include a Combination of Specific Products
+- Calculate the Total Number of Products Ordered by Each User
+- Find Users with Orders That Have a Total Weight Exceeding a Certain Value
+- Get Users Who Have Reordered Products
+- Retrieve Users with Orders That Have a Specific Status
+- Find Users with Orders Placed on Weekends
+- Calculate the Most Popular Product Based on Order Frequency
