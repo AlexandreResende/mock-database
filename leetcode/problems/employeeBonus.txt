@@ -1,0 +1,12 @@
+# https://leetcode.com/problems/employee-bonus/description/
+# My solution
+
+SELECT emp.name, bon.bonus 
+FROM Employee emp
+LEFT OUTER JOIN Bonus bon
+ON emp.empId = bon.empId
+WHERE bon.bonus IS NULL
+OR bon.bonus < 1000;
+
+# Other solutions
+-
