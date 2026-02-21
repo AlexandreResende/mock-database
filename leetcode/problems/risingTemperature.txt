@@ -1,0 +1,21 @@
+# https://leetcode.com/problems/rising-temperature/description/
+# My solution - Too Slow
+
+SELECT id as Id
+FROM Weather w
+WHERE w.temperature > (
+  SELECT temperature
+  FROM Weather w2
+  WHERE recordDate = DATE_SUB(w.recordDate, INTERVAL 1 DAY)
+);
+
+## DATE_SUB function from MYSQL to subtract one date from the recordDate
+## and select the yesterday to compare the recordDate
+
+# Other solution
+
+SELECT w1.id
+FROM Weather w1, Weather w2
+WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature > w2.temperature;
+
+## DATEDIFF function to get dates where the difference is 1
