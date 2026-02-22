@@ -1,0 +1,9 @@
+# https://leetcode.com/problems/classes-with-at-least-5-students/
+# My solution
+
+SELECT class
+FROM Courses
+GROUP BY class
+HAVING COUNT(class) >= 5;
+
+# Other solutions
