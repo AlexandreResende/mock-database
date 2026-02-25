@@ -1,0 +1,9 @@
+# https://leetcode.com/problems/swap-sex-of-employees/description/
+# My solution
+
+UPDATE Salary
+SET sex = CASE sex
+    WHEN "m" THEN "f"
+    WHEN "f" THEN "m"
+END
+WHERE sex IN ("m", "f")
