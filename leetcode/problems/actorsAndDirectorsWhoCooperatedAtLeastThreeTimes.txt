@@ -1,0 +1,17 @@
+# https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/description/
+# My solution
+
+SELECT actor_id, director_id
+FROM ActorDirector ad
+HAVING (
+  SELECT COUNT()
+  FROM ActorDirector
+  WHERE ad.actor_id = actor_id
+  AND ad.director_id = director_id
+) >= 3;
+
+# Other solutions
+SELECT actor_id, director_id
+FROM ActorDirector
+GROUP BY actor_id, director_id
+HAVING COUNT(timestamp) >= 3;
