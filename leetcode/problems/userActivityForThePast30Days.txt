@@ -1,0 +1,8 @@
+# https://leetcode.com/problems/user-activity-for-the-past-30-days-i/description/
+# My solution
+
+SELECT activity_date as day, COUNT(DISTINCT user_id) as active_users
+FROM Activity
+WHERE activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')
+AND (activity_date > DATE_SUB("2019-07-27", INTERVAL 30 DAY) AND activity_date <= "2019-07-27")
+GROUP BY activity_date;
