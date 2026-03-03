@@ -1,0 +1,9 @@
+# https://leetcode.com/problems/queries-quality-and-percentage/description/
+# My solution
+
+SELECT 
+  query_name,
+  ROUND((SUM(rating / position) / COUNT(rating)), 2) as quality,
+  ROUND(SUM(IF(rating < 3, 1, 0)) / COUNT(rating) * 100, 2) as poor_query_percentage
+FROM Queries
+GROUP BY query_name;
