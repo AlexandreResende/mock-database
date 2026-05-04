@@ -1,0 +1,18 @@
+# https://leetcode.com/problems/employees-with-missing-information/description/
+# My solution
+
+SELECT employee_id
+FROM Employees
+WHERE employee_id NOT IN (SELECT employee_id FROM Salaries)
+UNION
+SELECT employee_id
+FROM Salaries
+WHERE employee_id NOT IN (SELECT employee_id FROM Employees)
+ORDER BY employee_id;
+
+# Another solution
+
+SELECT e.employee_id FROM Employees e WHERE e.employee_id NOT IN (SELECT s.employee_id FROM Salaries s WHERE s.salary IS NOT NULL)
+UNION
+SELECT s.employee_id FROM Salaries s WHERE s.employee_id NOT IN (SELECT e.employee_id FROM Employees e WHERE e.name IS NOT NULL)
+ORDER BY 1 ASC
