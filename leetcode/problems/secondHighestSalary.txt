@@ -1,0 +1,25 @@
+# https://leetcode.com/problems/second-highest-salary/description/
+# My solution
+
+SELECT 
+    CASE
+        WHEN COUNT(salary) = 0 THEN null
+        ELSE MAX(salary)
+    END as SecondHighestSalary
+FROM Employee
+WHERE salary < (SELECT salary FROM Employee ORDER BY salary DESC LIMIT 1)
+ORDER BY salary DESC
+LIMIT 1;
+
+# other solutions
+
+SELECT (
+    SELECT DISTINCT salary
+    FROM Employee
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET 1
+) AS SecondHighestSalary;
+
+SELECT MAX(salary) AS SecondHighestSalary
+FROM Employee
+WHERE salary < (SELECT MAX(salary) FROM Employee);
