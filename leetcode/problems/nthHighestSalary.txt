@@ -1,0 +1,31 @@
+# https://leetcode.com/problems/nth-highest-salary/description/
+# My solution
+
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  SET N = N-1;
+  RETURN (
+    SELECT DISTINCT
+        CASE
+            WHEN N < 0 THEN NULL
+            WHEN N > (SELECT COUNT(DISTINCT salary) FROM Employee) THEN NULL            
+            ELSE salary
+        END
+    FROM Employee
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET N
+  );
+END
+
+# Other solution
+
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+    SET N = N - 1;
+    RETURN (
+        SELECT DISTINCT salary
+        FROM Employee
+        ORDER BY salary DESC
+        LIMIT 1 OFFSET N
+    );
+END
