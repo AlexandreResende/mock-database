@@ -1,0 +1,22 @@
+# https://leetcode.com/problems/managers-with-at-least-5-direct-reports/description/?envType=study-plan-v2&envId=top-sql-50
+# my solution
+
+SELECT name
+FROM Employee
+WHERE id IN (
+    SELECT managerId FROM Employee GROUP BY managerId HAVING COUNT(*) >= 5
+);
+
+# Other solution
+
+SELECT a.name 
+FROM Employee a 
+JOIN Employee b ON a.id = b.managerId 
+GROUP BY b.managerId 
+HAVING COUNT(*) >= 5
+
+SELECT e.name
+FROM Employee AS e 
+INNER JOIN Employee AS m ON e.id=m.managerId 
+GROUP BY m.managerId 
+HAVING COUNT(m.managerId) >= 5
