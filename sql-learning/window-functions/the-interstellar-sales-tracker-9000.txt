@@ -1,0 +1,15 @@
+# https://www.practicewindowfunctions.com/problem/2/the-interstellar-sales-tracker-9000
+
+SELECT
+	productid,
+	o.orderid,
+	o.orderdate,
+	SUM(od.quantity * od.unitprice) OVER(PARTITION BY od.productid ORDER BY o.orderdate ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as runningtotal
+FROM orders as o
+JOIN orderdetails as od
+ON o.orderid = od.orderid;
+
+
+-- ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+-- count all the values before the current row, inclusive,
+-- and add it to the current sum (in the example above)
