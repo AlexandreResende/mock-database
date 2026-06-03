@@ -1,0 +1,14 @@
+# https://www.practicewindowfunctions.com/problem/4/two-orders-before-two-orders-after-the-price-prophecy
+
+SELECT
+	p.productid,
+	o.orderdate,
+	od.quantity,
+	od.unitprice,
+	LEAD(od.unitprice, 2) OVER(PARTITION BY p.productid ORDER BY o.orderdate) as futureprice,
+	LAG(od.unitprice, 2) OVER(PARTITION BY p.productid ORDER BY o.orderdate) as pastprice
+FROM products as p
+LEFT JOIN orderdetails as od
+ON od.productid = p.productid
+LEFT JOIN orders as o
+ON o.orderid = od.orderid;
