@@ -1,0 +1,18 @@
+# https://www.practicewindowfunctions.com/problem/3/top-5-spenders-in-the-galactic-bazaar
+
+WITH total_spent AS (
+	SELECT DISTINCT
+		c.customerid,
+		SUM(o.totalamount) as totalspent
+	FROM customers as c
+	JOIN orders as o
+	ON c.customerid = o.customerid
+	GROUP BY c.customerid
+)
+
+SELECT 
+	customerid,
+	totalspent,
+	RANK() OVER(ORDER BY totalspent DESC) as rank
+FROM total_spent
+LIMIT 5;
