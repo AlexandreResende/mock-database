@@ -1,0 +1,9 @@
+# https://www.practicewindowfunctions.com/problem/9/lowest-deals-in-the-galaxy
+
+SELECT
+	category,
+	name as productname,
+	price,
+	MIN(price) OVER(PARTITION BY category) as lowestcategoryprice
+FROM products
+	
