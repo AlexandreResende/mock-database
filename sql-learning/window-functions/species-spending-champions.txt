@@ -1,0 +1,28 @@
+# https://www.practicewindowfunctions.com/problem/7/species-spending-champions
+
+WITH customer_avg AS (
+	SELECT
+		c.customerid,
+		c.species,
+		AVG(o.totalamount) as averagerevenue
+	FROM customers as c
+	JOIN orders as o
+	ON c.customerid = o.customerid
+	GROUP BY c.customerid, c.species
+),
+species_max AS (
+	SELECT
+		species,
+		MAX(averagerevenue) as maxaverage
+	FROM customer_avg
+	GROUP BY species
+)
+
+SELECT
+	ca.customerid,
+	ca.species,
+	ca.averagerevenue
+FROM customer_avg as ca
+JOIN species_max as sm
+ON ca.species = sm.species
+WHERE ca.averagerevenue >= sm.maxaverage
