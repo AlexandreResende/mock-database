@@ -1,0 +1,8 @@
+# https://www.practicewindowfunctions.com/problem/8/five-transaction-trail-tracker
+
+SELECT
+	customerid,
+	orderdate,
+	totalamount,
+	SUM(totalamount) OVER(PARTITION BY customerid ORDER BY orderdate ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) as rollingspending
+FROM orders;
