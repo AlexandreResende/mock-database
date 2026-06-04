@@ -1,0 +1,11 @@
+# https://www.practicewindowfunctions.com/problem/6/how-much-more-did-they-order
+
+SELECT
+	od.productid,
+	o.orderdate,
+	od.quantity,
+	LAG(od.quantity, 1) OVER(PARTITION BY od.productid ORDER BY o.orderdate) as previousquantity,
+	(od.quantity - LAG(od.quantity, 1) OVER(PARTITION BY od.productid ORDER BY o.orderdate)) as quantitychange
+FROM orders as o
+JOIN orderdetails as od
+ON o.orderid = od.orderid;
