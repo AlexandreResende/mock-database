@@ -1,0 +1,16 @@
+# https://www.practicewindowfunctions.com/problem/10/the-galactic-max-order-hunt
+
+WITH max_amount_per_customer AS (
+	SELECT
+		customerid,
+		orderid,
+		orderdate,
+		totalamount,
+		MAX(totalamount) OVER(PARTITION BY customerid) as maxorderamount
+	FROM orders
+)
+
+SELECT
+	*
+FROM max_amount_per_customer as m
+ORDER BY customerid, orderdate
