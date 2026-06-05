@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/11/the-largest-order-in-the-galaxy
+
+WITH max_order_amount AS (
+	SELECT customerid, orderid, totalamount, MAX(totalamount) OVER() as maxamount FROM orders
+)
+
+SELECT
+	customerid,
+	orderid,
+	totalamount
+FROM max_order_amount
+WHERE totalamount = maxamount
