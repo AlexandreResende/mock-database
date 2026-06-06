@@ -1,0 +1,10 @@
+# https://www.practicewindowfunctions.com/problem/12/interstellar-spending-sprees
+
+SELECT
+	customerid,
+	orderid,
+	orderdate,
+	totalamount,
+	ROUND((AVG(totalamount) OVER(PARTITION BY customerid ORDER BY orderdate ROWS BETWEEN 2 PRECEDING AND CURRENT ROW))::numeric, 2) as rollingavgspend
+FROM orders
+ORDER BY customerid, orderdate;
