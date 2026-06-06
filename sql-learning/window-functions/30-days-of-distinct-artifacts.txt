@@ -1,0 +1,18 @@
+# https://www.practicewindowfunctions.com/problem/16/30-days-of-distinct-artifacts
+
+WITH recent_sales AS (
+  SELECT DISTINCT
+    od.productid,
+    p.category
+  FROM products as p
+  JOIN orderdetails as od
+  ON od.productid = p.productid
+  JOIN orders as o
+  ON o.orderid = od.orderid
+  WHERE o.orderdate::timestamp >= current_date - INTERVAL '30 day'
+)
+
+SELECT DISTINCT
+  category,
+  COUNT(productid) OVER(PARTITION BY category) as distinctartifactssold
+FROM recent_sales;
