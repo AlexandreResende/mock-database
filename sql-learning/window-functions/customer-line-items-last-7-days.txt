@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/14/customer-line-items-last-7-days
+
+SELECT
+	o.orderid,
+	o.customerid,
+	o.orderdate,
+	od.orderdetailid,
+	COUNT(o.orderid) OVER(PARTITION BY o.customerid ORDER BY o.orderdate RANGE BETWEEN INTERVAL '6 day' PRECEDING AND CURRENT ROW) as customer_lineitems_last_7d
+FROM orders as o
+JOIN orderdetails as od
+ON o.orderid = od.orderid
+ORDER BY o.customerid, o.orderdate;
