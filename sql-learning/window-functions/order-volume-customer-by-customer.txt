@@ -1,0 +1,7 @@
+# https://www.practicewindowfunctions.com/problem/13/order-volume-customer-by-customer
+
+SELECT
+	customerid,
+	orderid,
+	COUNT(*) OVER(PARTITION BY customerid) as totalorders
+FROM orders;
