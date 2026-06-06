@@ -1,0 +1,42 @@
+# https://www.practicewindowfunctions.com/problem/15/galactic-high-spenders-by-week
+
+WITH line AS (
+  SELECT 
+    o.customerid,
+    DATE_TRUNC('week', o.orderdate)::date AS week_start,
+    od.quantity * od.unitprice AS line_amount
+  FROM orders o
+  JOIN orderdetails od ON od.orderid = o.orderid
+), per_customer_week AS (
+  SELECT 
+    customerid,
+    week_start,
+    SUM(line_amount) over (PARTITION BY customerid, week_start) AS total_spend
+  FROM line
+), dedup AS (
+  SELECT distinct 
+    customerid,
+    week_start,
+    total_spend
+  FROM per_customer_week
+), scored AS (
+  SELECT 
+    customerid,
+    week_start,
+    total_spend,
+    MAX(total_spend) over (PARTITION BY week_start) AS max_total_in_week,
+    RANK() over (PARTITION BY week_start ORDER BY total_spend desc) AS top_rank
+  FROM dedup
+)
+
+SELECT 
+  customerid,
+  week_start,
+  total_spend,
+  (total_spend = max_total_in_week) AS is_top_spender,
+  top_rank
+FROM scored
+ORDER BY 
+  week_start,
+  total_spend desc,
+  customerid;
