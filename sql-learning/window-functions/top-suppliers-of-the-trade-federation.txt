@@ -1,0 +1,13 @@
+# https://www.practicewindowfunctions.com/problem/19/top-suppliers-of-the-trade-federation
+
+WITH supply_count AS (
+	select DISTINCT supplierid, COUNT(productid) OVER(PARTITION BY supplierid) as productcount
+	FROM products
+	ORDER BY productcount DESC
+)
+
+SELECT
+	supplierid,
+	productcount,
+	ROW_NUMBER() OVER() as supplier_num
+FROM supply_count
