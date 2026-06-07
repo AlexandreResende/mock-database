@@ -1,0 +1,16 @@
+# https://leetcode.com/problems/restaurant-growth/description/?envType=study-plan-v2&envId=top-sql-50
+# My solution
+
+WITH result AS (
+    SELECT
+        DATE_ADD(visited_on, INTERVAL 6 day) as visited_on,
+        SUM(amount) OVER(ORDER BY visited_on RANGE BETWEEN CURRENT ROW AND INTERVAL '6' DAY FOLLOWING) as amount,
+        ROUND((SUM(amount) OVER(ORDER BY visited_on RANGE BETWEEN CURRENT ROW AND INTERVAL '6' DAY FOLLOWING)/7), 2) as average_amount
+    FROM Customer
+)
+
+SELECT DISTINCT
+    *
+FROM result
+WHERE visited_on <= (SELECT MAX(visited_on) FROM Customer)
+ORDER BY visited_on;
