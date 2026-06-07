@@ -1,0 +1,17 @@
+# https://www.practicewindowfunctions.com/problem/18/the-first-transaction-initiative
+
+WITH first_transaction AS (
+	SELECT 
+		customerid, 
+		transactionid, 
+		transactiondate, 
+		ROW_NUMBER() OVER(PARTITION BY customerid ORDER BY transactiondate) as rank
+	FROM transaction
+)
+
+SELECT
+	customerid,
+	transactionid,
+	transactiondate
+FROM first_transaction
+WHERE rank = 1;
