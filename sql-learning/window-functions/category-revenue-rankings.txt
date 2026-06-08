@@ -1,0 +1,14 @@
+# https://www.practicewindowfunctions.com/problem/29/category-revenue-rankings
+
+WITH total_product_category_revenue AS (
+	SELECT
+		p.category,
+		p.productid,
+		SUM(od.quantity*od.unitprice) OVER(PARTITION BY p.productid) as totalrevenue
+	FROM products as p
+	JOIN orderdetails as od ON p.productid = od.productid
+)
+
+SELECT DISTINCT
+	*, DENSE_RANK() OVER(PARTITION BY category ORDER BY totalrevenue DESC) as rank
+FROM total_product_category_revenue
