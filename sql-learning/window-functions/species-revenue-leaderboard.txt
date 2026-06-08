@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/28/species-revenue-leaderboard
+
+WITH total_revenue AS (
+	SELECT DISTINCT
+		c.species,
+		SUM(o.totalamount) OVER(PARTITION BY c.species) as totalrevenue
+	FROM orders as o
+	JOIN customers as c ON c.customerid = o.customerid
+)
+
+SELECT *, RANK() OVER(ORDER BY totalrevenue DESC) as rank
+FROM total_revenue
