@@ -1,0 +1,7 @@
+# https://www.practicewindowfunctions.com/problem/26/supplier-showdown
+
+WITH count_products_per_supplier AS (
+	SELECT DISTINCT supplierid, COUNT(productid) OVER(PARTITION BY supplierid) uniqueproducts FROM products
+)
+
+SELECT *, RANK() OVER(ORDER BY uniqueproducts DESC) FROM count_products_per_supplier
