@@ -1,0 +1,6 @@
+# https://www.practicewindowfunctions.com/problem/21/the-peak-stock-protocol
+
+SELECT DISTINCT
+	productid,
+	MAX(quantityavailable) OVER(PARTITION BY productid) as quantityavailable
+FROM inventory
