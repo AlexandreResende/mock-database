@@ -1,0 +1,9 @@
+# https://www.practicewindowfunctions.com/problem/23/top-3-galactic-bestsellers
+
+WITH sum_products_sold AS (
+	SELECT DISTINCT productid, SUM(quantity) OVER(PARTITION BY productid) as totalquantity FROM orderdetails
+), rank_products AS (
+	SELECT productid, totalquantity, ROW_NUMBER() OVER(ORDER BY totalquantity DESC) as ranking FROM sum_products_sold
+)
+
+SELECT productid, totalquantity, ranking as rank FROM rank_products WHERE ranking <= 3
