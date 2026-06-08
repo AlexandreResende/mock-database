@@ -1,0 +1,11 @@
+# https://www.practicewindowfunctions.com/problem/24/species-spending-standings
+
+WITH sum_totalspending AS (
+	SELECT DISTINCT customerid, SUM(totalamount) OVER(PARTITION BY customerid) as totalspending FROM orders
+), rank_customers AS (
+	SELECT c.species, c.customerid, s.totalspending, RANK() OVER(PARTITION BY c.species ORDER BY s.totalspending DESC) as rank
+	FROM sum_totalspending as s
+	JOIN customers as c ON s.customerid = c.customerid
+)
+
+SELECT * FROM rank_customers
