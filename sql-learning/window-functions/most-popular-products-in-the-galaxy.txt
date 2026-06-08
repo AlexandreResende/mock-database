@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/25/most-popular-products-in-the-galaxy
+
+WITH sum_quantity AS (
+	SELECT DISTINCT
+		od.productid,
+		p.name as productname,
+		SUM(od.quantity) OVER(PARTITION BY od.productid) as totalquantity
+	FROM orderdetails as od
+	JOIN products as p ON od.productid = p.productid
+)
+
+SELECT *, RANK() OVER(ORDER BY totalquantity DESC) FROM sum_quantity
