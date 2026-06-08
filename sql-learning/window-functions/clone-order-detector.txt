@@ -1,0 +1,37 @@
+# https://www.practicewindowfunctions.com/problem/22/clone-order-detector
+
+# my solution
+
+SELECT o.*
+FROM orders as o
+JOIN orders as o1
+ON o.customerid = o1.customerid AND o.orderdate = o1.orderdate AND o.totalamount = o1.totalamount AND o.orderid <> o1.orderid
+ORDER BY o.customerid, o.orderid
+
+
+# other solution
+WITH duplicates
+     AS (SELECT customerid,
+                orderid,
+                orderdate,
+                totalamount,
+                Row_number()
+                  OVER (
+                    partition BY customerid, orderdate, totalamount
+                    ORDER BY orderid) AS rank
+         FROM   orders),
+     is_duped
+     AS (SELECT customerid,
+                orderid,
+                orderdate,
+                totalamount
+         FROM   duplicates
+         WHERE  rank > 1)
+SELECT o.*
+FROM   orders o
+       INNER JOIN is_duped i
+               ON o.customerid = i.customerid
+                  AND o.orderdate = i.orderdate
+                  AND o.totalamount = i.totalamount
+ORDER  BY o.customerid,
+          o.orderid; 
