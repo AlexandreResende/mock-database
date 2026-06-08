@@ -1,0 +1,16 @@
+# https://www.practicewindowfunctions.com/problem/20/species-revenue-rankings
+
+WITH total_revenue AS (
+	SELECT DISTINCT customerid, SUM(totalamount) OVER(PARTITION BY customerid) as total FROM orders
+)
+
+SELECT
+	t.customerid,
+	c.species,
+	t.total as totalspent,
+	ROW_NUMBER() OVER(PARTITION BY c.species ORDER BY t.total DESC) as speciesrank
+FROM total_revenue as t
+JOIN customers as c
+ON t.customerid = c.customerid
+ORDER BY t.customerid
+	
