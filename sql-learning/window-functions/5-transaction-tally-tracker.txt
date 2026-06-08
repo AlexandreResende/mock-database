@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/27/5-transaction-tally-tracker
+
+WITH rolling_sum AS (
+	SELECT 
+		customerid, orderid, orderdate, totalamount,
+		SUM(totalamount) OVER(PARTITION BY customerid ORDER BY orderdate ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) as rollingtotal
+	FROM orders
+)
+
+SELECT
+	*, RANK() OVER(PARTITION BY customerid ORDER BY rollingtotal DESC)
+FROM rolling_sum
