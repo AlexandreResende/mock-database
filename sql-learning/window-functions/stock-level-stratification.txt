@@ -1,0 +1,16 @@
+# https://www.practicewindowfunctions.com/problem/36/stock-level-stratification
+
+WITH sum_stock AS (
+	SELECT
+		p.category,
+		p.productid,
+		SUM(i.quantityavailable) as totalstock
+	FROM products as p
+	JOIN inventory as i ON p.productid = i.productid
+	GROUP BY p.category, p.productid
+)
+
+SELECT
+	*,
+	NTILE(4) OVER(PARTITION BY category ORDER BY totalstock DESC) stocktier
+FROM sum_stock
