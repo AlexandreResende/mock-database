@@ -1,0 +1,15 @@
+# https://www.practicewindowfunctions.com/problem/33/galactic-spending-tiers
+
+WITH total_amount AS (
+	SELECT DISTINCT
+		c.species, 
+		c.customerid,
+		SUM(o.totalamount) OVER(PARTITION BY c.customerid) as totalspending
+	FROM customers as c
+	JOIN orders as o ON c.customerid = o.customerid
+)
+
+SELECT 
+  *, 
+  NTILE(4) OVER(PARTITION BY species ORDER BY totalspending DESC) as spendingtier
+FROM total_amount;
