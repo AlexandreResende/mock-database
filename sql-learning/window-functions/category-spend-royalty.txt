@@ -1,0 +1,15 @@
+# https://www.practicewindowfunctions.com/problem/31/category-spend-royalty
+
+WITH total_spending AS (
+	SELECT o.customerid, p.category, SUM(od.quantity*od.unitprice) as totalspending
+	FROM orders as o
+	JOIN orderdetails as od ON o.orderid = od.orderid
+	JOIN products as p ON p.productid = od.productid
+	GROUP BY o.customerid, p.category
+)
+
+SELECT DISTINCT
+	*,
+	ROW_NUMBER() OVER(PARTITION BY category ORDER BY totalspending DESC) as rank
+FROM total_spending
+ORDER BY category, rank
