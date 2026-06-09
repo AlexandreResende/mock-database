@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/30/order-titans-of-the-stars
+
+WITH total_orders AS (
+	SELECT customerid, COUNT(orderid) as ordercount FROM orders GROUP BY customerid
+)
+
+SELECT DISTINCT
+	customerid,
+	ordercount,
+	DENSE_RANK() OVER(ORDER BY ordercount DESC) as rank1,
+	RANK() OVER(ORDER BY ordercount DESC) as rank2
+FROM total_orders
