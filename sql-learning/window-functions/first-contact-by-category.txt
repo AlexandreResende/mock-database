@@ -1,0 +1,19 @@
+# https://www.practicewindowfunctions.com/problem/32/first-contact-by-category
+
+WITH earliest_order AS (
+	SELECT 
+		o.customerid, 
+		p.category, 
+		o.orderid, 
+		o.orderdate
+	FROM orders as o
+	JOIN orderdetails as od ON o.orderid = od.orderid
+	JOIN products as p ON p.productid = od.productid
+), ranked AS (
+	SELECT *, ROW_NUMBER() OVER(PARTITION BY customerid, category ORDER BY orderdate) as rank FROM earliest_order
+)
+
+SELECT
+	customerid, category, orderid, orderdate
+FROM ranked
+WHERE rank = 1
