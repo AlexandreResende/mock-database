@@ -1,0 +1,14 @@
+# https://www.practicewindowfunctions.com/problem/35/customer-frequency-classes
+
+WITH total_orders AS (
+	SELECT
+		customerid,
+		COUNT(orderid) as totalorders
+	FROM orders
+	GROUP BY customerid
+)
+
+SELECT
+	*,
+	NTILE(3) OVER(ORDER BY totalorders DESC) as frequencytier
+FROM total_orders
