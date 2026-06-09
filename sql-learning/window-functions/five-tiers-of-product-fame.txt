@@ -1,0 +1,15 @@
+# https://www.practicewindowfunctions.com/problem/34/five-tiers-of-product-fame
+
+WITH total_quantity AS (
+	SELECT DISTINCT
+		p.productid,
+		p.name as productname,
+		SUM(od.quantity) OVER(PARTITION BY p.productid) as totalquantity
+	FROM products as p
+	JOIN orderdetails as od ON p.productid = od.productid
+)
+
+SELECT
+	*,
+	NTILE(5) OVER(ORDER BY totalquantity DESC) as popularitytier
+FROM total_quantity
