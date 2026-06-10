@@ -1,0 +1,16 @@
+# https://www.practicewindowfunctions.com/problem/37/supplier-pricing-pyramid
+
+WITH average_price AS (
+	SELECT 
+		s.supplierid,
+		s.name as suppliername,
+		AVG(p.price) as averageprice
+	FROM products as p
+	JOIN suppliers as s ON p.supplierid = s.supplierid
+	GROUP BY s.supplierid, s.name
+)
+
+SELECT
+	*,
+	NTILE(3) OVER(ORDER BY averageprice DESC) as pricingtier
+FROM average_price
