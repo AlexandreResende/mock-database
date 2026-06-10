@@ -1,0 +1,26 @@
+# https://www.practicewindowfunctions.com/problem/39/the-rare-and-the-profitable
+
+WITH quantity_available AS (
+	SELECT
+		productid,
+		SUM(quantityavailable) as quantityavailable
+	FROM inventory
+	GROUP BY productid
+), total_revenue AS (
+	SELECT
+		p.productid,
+		p.name as productname,
+		qa.quantityavailable,
+		SUM(od.quantity*od.unitprice) as totalrevenue
+	FROM products as p
+	JOIN orderdetails as od ON p.productid = od.productid
+	JOIN orders as o ON o.orderid = od.orderid
+	JOIN quantity_available as qa ON p.productid = qa.productid
+	WHERE o.orderdate >= current_date - interval '30 days'
+	GROUP BY p.productid, p.name, qa.quantityavailable
+)
+
+SELECT
+	*,
+	NTILE(4) OVER(ORDER BY totalrevenue DESC) as demandtier
+FROM total_revenue
