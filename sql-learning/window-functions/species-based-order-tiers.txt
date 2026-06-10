@@ -1,0 +1,16 @@
+# https://www.practicewindowfunctions.com/problem/38/species-based-order-tiers
+
+WITH total_amount AS (
+	SELECT
+		c.species,
+		o.orderid,
+		SUM(o.totalamount) as totalamount
+	FROM customers as c
+	JOIN orders as o ON c.customerid = o.customerid
+	GROUP BY c.species, o.orderid
+)
+
+SELECT
+	*,
+	NTILE(4) OVER(PARTITION BY species ORDER BY totalamount DESC) as spendingtier
+FROM total_amount
