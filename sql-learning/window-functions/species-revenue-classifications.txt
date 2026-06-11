@@ -1,0 +1,15 @@
+# https://www.practicewindowfunctions.com/problem/40/species-revenue-classifications
+
+WITH base AS (
+	SELECT
+		c.species,
+		SUM(o.totalamount) as totalrevenue
+	FROM customers as c
+	JOIN orders as o ON c.customerid = o.customerid
+	GROUP BY c.species
+)
+
+SELECT
+	*,
+	NTILE(5) OVER(ORDER BY totalrevenue DESC) as revenuetier
+FROM base
