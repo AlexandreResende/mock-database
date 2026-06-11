@@ -1,0 +1,14 @@
+# https://www.practicewindowfunctions.com/problem/42/species-transaction-origins
+
+WITH base AS (
+	SELECT
+		c.species,
+		FIRST_VALUE(t.transactiondate) OVER(PARTITION BY c.species ORDER BY t.transactiondate) as firsttransactiondate
+	FROM customers as c
+	JOIN orders as o ON o.customerid = c.customerid
+	JOIN transaction as t ON o.orderid = t.orderid
+)
+
+SELECT DISTINCT
+	*
+FROM base
