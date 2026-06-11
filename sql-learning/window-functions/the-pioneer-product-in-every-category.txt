@@ -1,0 +1,13 @@
+# https://www.practicewindowfunctions.com/problem/43/the-pioneer-product-in-every-category
+
+WITH base AS (
+	SELECT DISTINCT
+		p.category,
+		FIRST_VALUE(p.name) OVER(PARTITION BY p.category ORDER BY o.orderdate) as productname,
+		FIRST_VALUE(o.orderdate) OVER(PARTITION BY p.category ORDER BY o.orderdate) as firstsolddate
+	FROM orders as o
+	JOIN orderdetails as od ON o.orderid = od.orderid
+	JOIN products as p ON p.productid = od.productid
+)
+
+SELECT * FROM base
