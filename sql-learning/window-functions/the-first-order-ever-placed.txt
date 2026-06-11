@@ -1,0 +1,13 @@
+# https://www.practicewindowfunctions.com/problem/41/the-first-order-ever-placed
+
+WITH first_order AS (
+	SELECT
+		customerid,
+		orderid,
+		orderdate,
+		totalamount,
+		FIRST_VALUE(orderdate) OVER(PARTITION BY customerid ORDER BY orderdate) as firstorderdate
+	FROM orders
+)
+
+SELECT customerid, orderid, totalamount, firstorderdate FROM first_order WHERE orderdate = firstorderdate
