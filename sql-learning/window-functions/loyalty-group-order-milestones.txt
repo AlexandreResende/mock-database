@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/44/loyalty-group-order-milestones
+
+WITH base as (
+	SELECT DISTINCT
+		c.loyaltystatus,
+		FIRST_VALUE(c.customerid) OVER(PARTITION BY c.loyaltystatus ORDER BY o.orderdate) as customerid,
+		FIRST_VALUE(o.orderdate) OVER(PARTITION BY c.loyaltystatus ORDER BY o.orderdate) as firstorderdate
+	FROM customers as c
+	JOIN orders as o ON c.customerid = o.customerid
+)
+
+SELECT * FROM base
