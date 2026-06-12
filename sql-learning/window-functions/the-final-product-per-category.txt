@@ -1,0 +1,13 @@
+# https://www.practicewindowfunctions.com/problem/46/the-final-product-per-category
+
+WITH base AS (
+	SELECT DISTINCT
+		p.category,
+		FIRST_VALUE(p.name) OVER(PARTITION BY p.category ORDER BY o.orderdate DESC) as productname,
+		(FIRST_VALUE(o.orderdate) OVER(PARTITION BY p.category ORDER BY o.orderdate DESC))::date as lastsolddate
+	FROM products as p
+	JOIN orderdetails as od ON p.productid = od.productid
+	JOIN orders as o ON o.orderid = od.orderid
+)
+
+SELECT * FROM base
