@@ -1,0 +1,11 @@
+# https://www.practicewindowfunctions.com/problem/45/the-final-purchase-report
+
+WITH base AS (
+	SELECT DISTINCT
+		FIRST_VALUE(orderid) OVER(PARTITION BY customerid ORDER BY orderdate DESC) as lastorders
+	FROM orders
+)
+
+SELECT o.customerid, o.orderid, o.totalamount, o.orderdate as lastorderdate FROM base as b
+JOIN orders as o
+ON o.orderid = b.lastorders
