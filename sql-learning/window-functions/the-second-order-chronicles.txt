@@ -1,0 +1,19 @@
+# https://www.practicewindowfunctions.com/problem/49/the-second-order-chronicles
+
+WITH base AS (
+	SELECT DISTINCT
+		customerid,
+		orderid,
+		totalamount,
+		orderdate,
+		NTH_VALUE(orderdate, 2) OVER(PARTITION BY customerid ORDER BY orderdate) as secondposition
+	FROM orders
+)
+
+SELECT 
+	customerid,
+	orderid,
+	totalamount,	
+	secondposition as secondorderdate
+FROM base WHERE orderdate = secondposition
+ORDER BY customerid

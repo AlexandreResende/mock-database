@@ -1,0 +1,13 @@
+# https://www.practicewindowfunctions.com/problem/48/last-fulfillments-by-supplier
+
+WITH base as (
+	SELECT DISTINCT
+		s.name as suppliername,
+		FIRST_VALUE(o.orderdate) OVER(PARTITION BY s.name ORDER BY o.orderdate DESC) as lastorderdate
+	FROM products as p
+	JOIN orderdetails as od ON p.productid = od.productid
+	JOIN orders as o ON o.orderid = od.orderid
+	JOIN suppliers as s ON p.supplierid = s.supplierid
+)
+
+SELECT * FROM base
