@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/47/species-transaction-wrap-up
+
+WITH base AS (
+	SELECT DISTINCT
+		c.species,
+		(FIRST_VALUE(t.transactiondate) OVER(PARTITION BY c.species ORDER BY t.transactiondate::date DESC))::date as lasttransactiondate
+	FROM customers as c
+	JOIN orders as o ON c.customerid = o.customerid
+	JOIN transaction as t ON o.orderid = t.orderid
+)
+
+SELECT * FROM base
