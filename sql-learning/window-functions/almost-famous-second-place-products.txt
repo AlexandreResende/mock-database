@@ -1,0 +1,15 @@
+# https://www.practicewindowfunctions.com/problem/50/almost-famous-second-place-products
+
+WITH base AS (
+	SELECT DISTINCT
+		p.category,
+		p.name as productname,
+		SUM(od.quantity) OVER(PARTITION BY p.productid) as totalsales
+	FROM products as p
+	JOIN orderdetails as od ON p.productid = od.productid
+)
+
+SELECT DISTINCT
+	*,
+	NTH_VALUE(productname, 2) OVER(PARTITION BY category ORDER BY totalsales DESC) as secondmostpopular
+FROM base
