@@ -1,0 +1,19 @@
+# https://www.practicewindowfunctions.com/problem/51/the-bronze-revenue-medalists
+
+WITH base AS (
+	SELECT DISTINCT
+		c.species,
+		c.customerid,
+		SUM(o.totalamount) as totalrevenue
+	FROM customers as c
+	JOIN orders as o ON c.customerid = o.customerid
+	GROUP BY c.species, c.customerid
+)
+
+SELECT DISTINCT
+	*,
+	NTH_VALUE(totalrevenue, 3) OVER(PARTITION BY species ORDER BY totalrevenue DESC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) as thirdhighestrevenue
+FROM base
+
+
+-- ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING -> remove null values
