@@ -1,0 +1,31 @@
+# https://www.practicewindowfunctions.com/problem/52/the-fifth-fulfillment
+
+WITH so
+     AS (SELECT DISTINCT s.supplierid,
+                         s.name AS suppliername,
+                         o.orderid,
+                         o.totalamount,
+                         o.orderdate
+         FROM   orderdetails od
+                join orders o
+                  ON od.orderid = o.orderid
+                join products p
+                  ON od.productid = p.productid
+                join suppliers s
+                  ON p.supplierid = s.supplierid)
+SELECT DISTINCT supplierid,
+                suppliername,
+                Nth_value(totalamount, 5)
+                  over (
+                    PARTITION BY supplierid
+                    ORDER BY totalamount DESC, orderid DESC ROWS BETWEEN
+                  unbounded preceding AND
+                  unbounded following) AS fifthlargestamount,
+                Nth_value(orderdate, 5)
+                  over (
+                    PARTITION BY supplierid
+                    ORDER BY totalamount DESC, orderid DESC ROWS BETWEEN
+                  unbounded preceding AND
+                  unbounded following) AS fifthlargestdate
+FROM   so
+ORDER  BY suppliername; 
