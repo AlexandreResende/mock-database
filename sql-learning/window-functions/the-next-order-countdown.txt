@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/53/the-next-order-countdown
+
+WITH base AS (
+	SELECT
+		customerid,
+		orderid,
+		orderdate,
+		LEAD(orderdate) OVER(PARTITION BY customerid ORDER BY orderdate) as nextorderdate
+	FROM orders
+)
+
+SELECT * FROM base
