@@ -1,0 +1,15 @@
+# https://www.practicewindowfunctions.com/problem/54/product-pairs-in-category-time
+
+WITH base AS (
+	SELECT
+		o.orderdate,
+		p.category,
+		p.name as productname,
+		LEAD(p.name) OVER(PARTITION BY p.category ORDER BY orderdate) as nextproduct
+	FROM orders as o
+	JOIN orderdetails as od ON o.orderid = od.orderid
+	JOIN products as p ON p.productid = od.productid
+	WHERE o.orderdate >= '2245-03-01' AND o.orderdate <= '2245-03-31'
+)
+
+SELECT * FROM base
