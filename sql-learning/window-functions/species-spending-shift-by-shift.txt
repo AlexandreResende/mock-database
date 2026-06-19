@@ -1,0 +1,14 @@
+# https://www.practicewindowfunctions.com/problem/56/species-spending-shift-by-shift
+
+WITH base AS (
+	SELECT
+		c.customerid,
+		c.species,
+		o.orderdate,
+		o.totalamount,
+		LEAD(o.totalamount) OVER(PARTITION BY c.species ORDER BY o.orderdate) as next_species_order_amount
+	FROM customers as c
+	JOIN orders as o ON c.customerid = o.customerid
+)
+
+SELECT * FROM base
