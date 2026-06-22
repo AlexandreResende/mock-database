@@ -1,0 +1,12 @@
+# https://www.practicewindowfunctions.com/problem/57/order-histories-one-step-back
+
+WITH base AS (
+	SELECT
+		customerid,
+		orderid,
+		orderdate,
+		LAG(orderdate, 1) OVER(PARTITION BY customerid ORDER BY orderdate) as previousorderdate
+	FROM orders
+)
+
+SELECT * FROM base
