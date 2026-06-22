@@ -1,0 +1,15 @@
+# https://www.practicewindowfunctions.com/problem/58/reverse-product-lineage
+
+WITH base AS (
+	SELECT
+		o.orderdate,
+		p.category,
+		p.name as productname,
+		LAG(p.name, 1) OVER(PARTITION BY p.category ORDER BY o.orderdate) as previousproduct
+	FROM orderdetails as od
+	JOIN orders as o ON od.orderid = o.orderid
+	JOIN products as p ON od.productid = p.productid
+	WHERE o.orderdate >= '2245-08-01' AND o.orderdate <= '2245-08-31' AND o.status = 'Completed'
+)
+
+SELECT * FROM base
