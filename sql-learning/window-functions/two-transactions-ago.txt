@@ -1,0 +1,14 @@
+# https://www.practicewindowfunctions.com/problem/59/two-transactions-ago
+
+WITH base AS (
+	SELECT
+		o.customerid,
+		t.transactionid,
+		o.totalamount,
+		LAG(t.transactionid, 2) OVER(PARTITION BY o.customerid ORDER BY t.transactiondate) as previoustransactionid,
+		LAG(o.totalamount, 2) OVER(PARTITION BY o.customerid ORDER BY t.transactiondate) as previoustransactionamount
+	FROM orders as o
+	JOIN transaction as t ON o.orderid = t.orderid	
+)
+
+SELECT * FROM base
