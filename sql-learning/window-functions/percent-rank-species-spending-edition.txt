@@ -1,0 +1,17 @@
+# https://www.practicewindowfunctions.com/problem/61/percent-rank-species-spending-edition
+
+WITH base AS (
+	SELECT DISTINCT
+		c.species,
+		c.customerid,
+		SUM(o.totalamount) as totalspending
+	FROM orders as o
+	JOIN customers as c ON o.customerid = c.customerid
+	GROUP BY c.species, c.customerid
+)
+
+SELECT DISTINCT
+	*,
+	PERCENT_RANK() OVER(PARTITION BY species ORDER BY totalspending DESC) as percentrank
+FROM base
+ORDER BY species, customerid
