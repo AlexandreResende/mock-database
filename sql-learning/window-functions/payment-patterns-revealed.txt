@@ -1,0 +1,13 @@
+# https://www.practicewindowfunctions.com/problem/60/payment-patterns-revealed
+
+WITH base AS (
+	SELECT
+		o.customerid,
+		t.transactiondate,
+		t.amount,
+		LAG(t.amount) OVER(PARTITION BY o.customerid ORDER BY t.transactiondate) as previouspayment
+	FROM orders as o
+	JOIN transaction as t ON o.orderid = t.orderid
+)
+
+SELECT * FROM base
