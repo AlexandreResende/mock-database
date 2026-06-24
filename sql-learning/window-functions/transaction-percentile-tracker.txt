@@ -1,0 +1,14 @@
+# https://www.practicewindowfunctions.com/problem/63/transaction-percentile-tracker
+
+WITH base AS (
+	SELECT DISTINCT
+		t.transactionid,
+		o.totalamount
+	FROM orders as o
+	JOIN transaction as t ON o.orderid = t.orderid
+)
+
+SELECT 
+	*,
+	PERCENT_RANK() OVER(ORDER BY totalamount DESC) as percentrank
+FROM base
