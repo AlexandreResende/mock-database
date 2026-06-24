@@ -1,0 +1,16 @@
+# https://www.practicewindowfunctions.com/problem/62/relative-product-popularity
+
+WITH base AS (
+	SELECT
+		p.category,
+		p.name as productname,
+		SUM(od.quantity) as totalquantity
+	FROM orderdetails as od
+	JOIN products as p ON od.productid = p.productid
+	GROUP BY p.category, p.name
+)
+
+SELECT
+	*,
+	PERCENT_RANK() OVER(PARTITION BY category ORDER BY totalquantity DESC) as popularityrank 
+FROM base
