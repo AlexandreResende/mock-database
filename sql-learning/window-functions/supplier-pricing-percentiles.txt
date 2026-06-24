@@ -1,0 +1,16 @@
+# https://www.practicewindowfunctions.com/problem/64/supplier-pricing-percentiles
+
+WITH base AS (
+	SELECT
+		s.supplierid,
+		s.name as suppliername,
+		AVG (price) as averageprice
+	FROM products as p
+	JOIN suppliers as s ON p.supplierid = s.supplierid
+	GROUP BY s.supplierid, s.name
+)
+
+SELECT 
+	*,
+	PERCENT_RANK() OVER(ORDER BY averageprice DESC) as pricingpercentrank
+FROM base
