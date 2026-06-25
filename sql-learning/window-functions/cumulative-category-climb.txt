@@ -1,0 +1,13 @@
+# https://www.practicewindowfunctions.com/problem/66/cumulative-category-climb
+
+WITH base AS (
+	SELECT
+		p.category,
+		p.name as productname,
+		SUM(od.quantity) as totalquantity
+	FROM products as p
+	JOIN orderdetails as od ON p.productid = od.productid
+	GROUP BY p.category, p.name
+)
+
+SELECT *, CUME_DIST() OVER(PARTITION BY category ORDER BY totalquantity DESC) as quantitydistribution FROM base
