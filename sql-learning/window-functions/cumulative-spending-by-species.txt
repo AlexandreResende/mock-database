@@ -1,0 +1,13 @@
+# https://www.practicewindowfunctions.com/problem/65/cumulative-spending-by-species
+
+WITH base AS (
+	SELECT
+		c.species,
+		c.customerid,
+		SUM(o.totalamount) as totalspending
+	FROM customers as c
+	JOIN orders as o ON o.customerid = c.customerid
+	GROUP BY c.species, c.customerid
+)
+
+SELECT *, CUME_DIST() OVER(PARTITION BY species ORDER BY totalspending DESC) as spendingdistribution FROM base
