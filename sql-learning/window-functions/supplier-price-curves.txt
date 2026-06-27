@@ -1,0 +1,16 @@
+# https://www.practicewindowfunctions.com/problem/67/supplier-price-curves
+
+WITH base AS (
+	SELECT
+		p.supplierid,
+		s.name as suppliername,
+		AVG(p.price) as averageprice
+	FROM products as p
+	JOIN suppliers as s ON p.supplierid = s.supplierid
+	GROUP BY p.supplierid, s.name
+)
+
+SELECT 
+	*,
+	CUME_DIST() OVER(ORDER BY averageprice DESC) as pricingdistribution 
+FROM base
