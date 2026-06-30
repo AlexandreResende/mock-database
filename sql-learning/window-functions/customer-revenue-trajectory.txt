@@ -1,0 +1,14 @@
+# https://www.practicewindowfunctions.com/problem/68/customer-revenue-trajectory
+
+WITH base AS (
+	SELECT
+		customerid,
+		SUM(totalamount) as totalspending
+	FROM orders
+	GROUP BY customerid
+)
+
+SELECT
+	*,
+	CUME_DIST() OVER(ORDER BY totalspending DESC) as revenuedistribution
+FROM base
