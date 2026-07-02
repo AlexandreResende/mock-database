@@ -1,0 +1,20 @@
+# https://www.practicewindowfunctions.com/problem/69/category-supplier-spending-footprint
+
+WITH base AS (
+	SELECT
+		c.customerid,
+		p.category,
+		p.supplierid,
+		SUM(od.quantity * od.unitprice) as totalspending
+	FROM orderdetails as od
+	JOIN orders as o ON od.orderid = o.orderid
+	JOIN customers as c ON o.customerid = c.customerid
+	JOIN products as p ON od.productid = p.productid
+	GROUP BY c.customerid, p.category, p.supplierid
+)
+
+SELECT
+	*,
+	RANK() OVER(PARTITION BY category, supplierid ORDER BY totalspending DESC) as spendingrank,
+	CUME_DIST() OVER(PARTITION BY category, supplierid ORDER BY totalspending DESC) as spendingcumedist
+FROM base
