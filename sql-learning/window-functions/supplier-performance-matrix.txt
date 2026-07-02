@@ -1,0 +1,20 @@
+# https://www.practicewindowfunctions.com/problem/70/supplier-performance-matrix
+
+WITH base AS (
+	SELECT DISTINCT
+		s.supplierid,
+		p.category,
+		SUM(od.quantity * p.price) as totalrevenue,
+		AVG(p.price) as averageprice
+	FROM orderdetails od
+	JOIN products as p ON p.productid = od.productid
+	JOIN suppliers as s ON s.supplierid = p.supplierid
+	GROUP BY s.supplierid, p.category
+)
+
+SELECT DISTINCT
+	*,
+	RANK() OVER(PARTITION BY category ORDER BY totalrevenue DESC) as revenuerank,
+	PERCENT_RANK() OVER(PARTITION BY category ORDER BY averageprice DESC) as pricepercentrank
+FROM base
+ORDER BY category, pricepercentrank
