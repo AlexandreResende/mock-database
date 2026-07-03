@@ -1,0 +1,17 @@
+# https://www.practicewindowfunctions.com/problem/74/inventory-stack-ranks
+
+WITH base AS (
+	SELECT
+		p.productid,
+		p.category,
+		SUM(i.quantityavailable) as totalstock
+	FROM products as p
+	JOIN inventory as i ON i.productid = p.productid
+	GROUP BY p.productid, p.category
+)
+
+SELECT
+	*,
+	RANK() OVER(PARTITION BY category ORDER BY totalstock DESC) as stockrank,
+	totalstock - LEAD(totalstock) OVER(PARTITION BY category  ORDER BY totalstock DESC) as differencetonext
+FROM base
