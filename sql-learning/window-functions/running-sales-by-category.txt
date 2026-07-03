@@ -1,0 +1,18 @@
+# https://www.practicewindowfunctions.com/problem/72/running-sales-by-category
+
+WITH base AS (
+	SELECT
+		p.category,
+		p.name as productname,
+		SUM(od.quantity) as totalsales
+	FROM orderdetails as od
+	JOIN products as p ON od.productid = p.productid
+	JOIN suppliers as s ON p.supplierid = s.supplierid
+	GROUP BY p.category, p.name
+)
+
+SELECT
+	*,
+	RANK() OVER(PARTITION BY category ORDER BY totalsales DESC) as salesrank,
+	SUM(totalsales) OVER(PARTITION BY category ORDER BY totalsales DESC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as runningsales
+FROM base
