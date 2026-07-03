@@ -1,0 +1,16 @@
+# https://www.practicewindowfunctions.com/problem/71/species-revenue-surge
+
+WITH base AS (
+	SELECT
+		c.species,
+		SUM(totalamount) as totalrevenue
+	FROM customers as c
+	JOIN orders as o ON c.customerid = o.customerid
+	GROUP BY c.species
+)
+
+SELECT
+	*,
+	RANK() OVER(ORDER BY totalrevenue DESC) as revenuerank,
+	CUME_DIST() OVER(ORDER BY totalrevenue DESC) as revenuecumedist
+FROM base
