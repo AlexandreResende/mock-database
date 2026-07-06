@@ -1,0 +1,47 @@
+# https://www.practicewindowfunctions.com/problem/76/unbroken-chains-of-loyalty
+
+WITH MonthlyOrders AS(
+  SELECT 
+    customerid,
+    CAST(DATE_TRUNC('month', OrderDate) as DATE) as OrderMonth
+  FROM Orders
+  GROUP BY CustomerID, DATE_TRUNC('month', OrderDate)
+), Numbered as (
+  SELECT 
+    customerid,
+    OrderMonth,
+    ROW_NUMBER() over (PARTITION BY CustomerID ORDER BY OrderMonth) as rn
+  FROM MonthlyOrders
+), Grouped as (
+  SELECT 
+    customerid,
+    OrderMonth,
+    rn,
+    OrderMonth - (rn * INTERVAL '1 month') as grp
+  FROM Numbered
+), Islands as (
+  SELECT 
+    customerid,
+    MIN(OrderMonth) as StreakStart,
+    MAX(OrderMonth) as StreakEnd,
+    COUNT(*) as StreakLength
+  FROM Grouped
+  GROUP BY CustomerID, grp
+), Ranked as (
+  SELECT 
+    customerid,
+    StreakStart,
+    StreakEnd,
+    StreakLength,
+    ROW_NUMBER() over (PARTITION BY CustomerID ORDER BY StreakLength desc) as rn
+  FROM Islands
+)
+
+SELECT 
+  customerid,
+  StreakStart,
+  StreakEnd,
+  StreakLength
+FROM Ranked
+where rn = 1
+ORDER BY StreakLength desc;
