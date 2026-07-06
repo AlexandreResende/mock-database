@@ -5,12 +5,12 @@ WITH MonthlyOrders AS(
     customerid,
     CAST(DATE_TRUNC('month', OrderDate) as DATE) as OrderMonth
   FROM Orders
-  GROUP BY CustomerID, DATE_TRUNC('month', OrderDate)
+  GROUP BY customerid, DATE_TRUNC('month', OrderDate)
 ), Numbered as (
   SELECT 
     customerid,
     OrderMonth,
-    ROW_NUMBER() over (PARTITION BY CustomerID ORDER BY OrderMonth) as rn
+    ROW_NUMBER() over (PARTITION BY customerid ORDER BY OrderMonth) as rn
   FROM MonthlyOrders
 ), Grouped as (
   SELECT 
@@ -26,14 +26,14 @@ WITH MonthlyOrders AS(
     MAX(OrderMonth) as StreakEnd,
     COUNT(*) as StreakLength
   FROM Grouped
-  GROUP BY CustomerID, grp
+  GROUP BY customerid, grp
 ), Ranked as (
   SELECT 
     customerid,
     StreakStart,
     StreakEnd,
     StreakLength,
-    ROW_NUMBER() over (PARTITION BY CustomerID ORDER BY StreakLength desc) as rn
+    ROW_NUMBER() over (PARTITION BY customerid ORDER BY StreakLength desc) as rn
   FROM Islands
 )
 
