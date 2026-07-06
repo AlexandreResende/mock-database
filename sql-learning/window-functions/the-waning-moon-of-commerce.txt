@@ -1,0 +1,40 @@
+# https://www.practicewindowfunctions.com/problem/79/the-waning-moon-of-commerce
+
+WITH base AS (
+	SELECT
+		orderdate::date,
+		SUM(totalamount) as dailyrevenue
+	FROM orders
+	GROUP BY orderdate::date
+	HAVING SUM(totalamount) < 25000
+), base2 AS (
+	SELECT
+		*,
+		ROW_NUMBER() OVER(ORDER BY orderdate) as rn
+	FROM base
+), base3 AS (
+	SELECT
+		*,
+		(orderdate - rn * INTERVAL '1 day') as grp
+	FROM base2
+), base4 AS (
+	SELECT
+		MIN(orderdate) as start_date,
+		MAX(orderdate) as end_date,
+		COUNT(*) as slowdown_length
+	FROM base3
+	GROUP BY grp
+), base5 AS (
+	SELECT
+		*,
+		DENSE_RANK() OVER(ORDER BY slowdown_length DESC) as rank
+	FROM base4
+)
+
+SELECT
+	start_date,
+	end_date,
+	slowdown_length
+FROM base5
+WHERE rank <= 5
+ORDER BY slowdown_length, start_date
