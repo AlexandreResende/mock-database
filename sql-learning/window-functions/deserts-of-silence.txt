@@ -1,0 +1,26 @@
+# https://www.practicewindowfunctions.com/problem/77/deserts-of-silence
+
+WITH base AS (
+	SELECT
+		customerid,
+		orderdate::date,
+		LAG(orderdate::date) OVER(PARTITION BY customerid ORDER BY orderdate) as prev
+	FROM orders
+), base2 AS (
+	SELECT
+		customerid,
+		(orderdate - prev) as diff
+	FROM base
+	WHERE prev IS NOT null
+), base3 AS (
+	SELECT
+		customerid,
+		MAX(diff) as longest_gap_days
+	FROM base2
+	GROUP BY customerid
+)
+
+SELECT
+	*
+FROM base3
+ORDER BY longest_gap_days DESC, customerid
