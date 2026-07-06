@@ -1,0 +1,24 @@
+# https://www.practicewindowfunctions.com/problem/75/order-cadence-explorer
+
+WITH base AS (
+	SELECT DISTINCT
+		customerid,
+		orderid,
+		orderdate - LAG(orderdate) OVER(PARTITION BY customerid ORDER BY orderdate) as gaporders
+	FROM orders
+), base2 AS (
+	SELECT DISTINCT
+		customerid,
+		COUNT(orderid) as totalorders,
+		AVG(gaporders) as avgtimebetweenorders
+	FROM base
+	GROUP BY customerid
+)
+
+SELECT DISTINCT
+	customerid,
+	totalorders,
+	RANK() OVER(ORDER BY totalorders DESC) as orderrank,
+	avgtimebetweenorders::text
+FROM base2
+ORDER BY totalorders DESC, avgtimebetweenorders::text
