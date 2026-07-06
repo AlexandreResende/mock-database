@@ -1,0 +1,42 @@
+# https://www.practicewindowfunctions.com/problem/78/constellations-of-consistency
+
+WITH base AS (
+	SELECT DISTINCT
+		p.supplierid,
+		o.orderdate::date as orderdate
+	FROM orderdetails as od
+	JOIN orders as o ON od.orderid = o.orderid
+	JOIN products as p ON od.productid = p.productid
+), base2 AS (
+	SELECT
+		*,
+		ROW_NUMBER() OVER(PARTITION BY supplierid ORDER BY orderdate) as rn
+	FROM base
+), base3 AS (
+	SELECT
+		*,
+		(orderdate - rn * INTERVAL '1 DAY') as grp
+	FROM base2
+), base4 AS (
+	SELECT
+		supplierid,
+		MIN(orderdate) as start_date,
+		MAX(orderdate) as end_date,
+		COUNT(*) as streak_length
+	FROM base3
+	GROUP BY supplierid, grp
+), base5 AS (
+	SELECT
+		*,
+		ROW_NUMBER() OVER(PARTITION BY supplierid ORDER BY streak_length DESC, end_date DESC) as rank
+	FROM base4
+)
+
+SELECT
+	supplierid,
+	start_date,
+	end_date,
+	streak_length
+FROM base5
+WHERE rank = 1
+ORDER BY streak_length DESC, end_date DESC
