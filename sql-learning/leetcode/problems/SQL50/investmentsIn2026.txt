@@ -1,0 +1,15 @@
+# https://leetcode.com/problems/investments-in-2016/description/?envType=study-plan-v2&envId=top-sql-50
+
+# My solution
+
+# Write your MySQL query statement below
+WITH base AS (
+    SELECT
+        pid,
+        tiv_2016
+    FROM Insurance as i
+    WHERE (SELECT COUNT(*) FROM Insurance WHERE lat=i.lat AND lon=i.lon) = 1 AND
+    (SELECT COUNT(*) FROM Insurance WHERE tiv_2015=i.tiv_2015) > 1
+)
+
+SELECT ROUND(SUM(tiv_2016), 2) as tiv_2016 FROM base;
