@@ -1,0 +1,37 @@
+# https://leetcode.com/problems/last-person-to-fit-in-the-bus/description/?envType=study-plan-v2&envId=top-sql-50
+
+# My solution
+
+WITH base AS (
+    SELECT
+        person_name,
+        weight,
+        (SELECT SUM(weight) FROM Queue WHERE turn <= q.turn) as tw
+    FROM Queue as q
+    ORDER BY turn
+)
+
+SELECT person_name FROM base WHERE tw <= 1000 ORDER BY tw DESC LIMIT 1; 
+
+# OTher solutions
+
+SELECT 
+    q1.person_name
+FROM Queue q1 JOIN Queue q2 ON q1.turn >= q2.turn
+GROUP BY q1.turn
+HAVING SUM(q2.weight) <= 1000
+ORDER BY SUM(q2.weight) DESC
+LIMIT 1
+
+SELECT person_name
+FROM
+(
+    SELECT
+        person_name,
+        turn,
+        SUM(weight) OVER (ORDER BY turn) AS total_weight
+    FROM Queue
+) q
+WHERE total_weight <= 1000
+ORDER BY total_weight DESC
+LIMIT 1;
