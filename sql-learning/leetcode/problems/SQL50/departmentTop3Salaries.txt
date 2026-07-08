@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/department-top-three-salaries/description/?envType=study-plan-v2&envId=top-sql-50
+
+# My solution
+
+WITH base AS (
+    SELECT
+        d.name as Department,
+        e.name as Employee,
+        e.salary as Salary
+    FROM Employee as e
+    JOIN Department as d ON e.departmentId = d.id
+), base2 AS (
+    SELECT
+        *,
+        DENSE_RANK() OVER(PARTITION BY Department ORDER BY Salary DESC) as r
+    FROM base
+)
+
+SELECT Department, Employee, Salary FROM base2 WHERE r <= 3;
