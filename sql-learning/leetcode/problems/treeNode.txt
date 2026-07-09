@@ -1,0 +1,10 @@
+# https://leetcode.com/problems/tree-node/description/
+
+SELECT
+    id,
+    CASE
+        WHEN p_id IS NULL THEN 'Root'
+        WHEN (SELECT COUNT(*) FROM Tree WHERE p_id = t.id) = 0 THEN 'Leaf'
+        ELSE 'Inner'
+    END as type
+FROM Tree as t;
