@@ -1,0 +1,34 @@
+# https://leetcode.com/problems/find-students-who-improved/description/
+
+WITH base AS (
+    SELECT
+        student_id,
+        subject,
+        score,
+        exam_date,
+        MIN(exam_date) as first_date,
+        MAX(exam_date) as last_date
+    FROM Scores
+    GROUP BY student_id, subject
+), base2 AS (
+    SELECT
+        student_id,
+        subject,
+        (
+            SELECT score 
+            FROM Scores
+            WHERE student_id = b.student_id 
+                AND subject = b.subject
+                AND exam_date = b.first_date
+        ) as first_score,
+        (
+            SELECT score 
+            FROM Scores
+            WHERE student_id = b.student_id 
+                AND subject = b.subject
+                AND exam_date = b.last_date
+        ) as latest_score
+    FROM base as b
+)
+
+SELECT * FROM base2 WHERE latest_score > first_score ORDER BY student_id, subject;
