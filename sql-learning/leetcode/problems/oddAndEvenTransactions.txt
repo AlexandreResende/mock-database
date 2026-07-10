@@ -1,0 +1,25 @@
+# https://leetcode.com/problems/odd-and-even-transactions/
+
+# My solution
+
+WITH base AS (
+    SELECT
+        transaction_date,
+        CASE
+            WHEN amount % 2 = 0 THEN amount
+            ELSE 0
+        END as even_value,
+        CASE
+            WHEN amount % 2 = 1 THEN amount
+            ELSE 0
+        END as odd_value
+    FROM transactions
+)
+
+SELECT
+    transaction_date,
+    SUM(odd_value) as odd_sum,
+    SUM(even_value) as even_sum
+FROM base
+GROUP BY transaction_date
+ORDER BY transaction_date;
