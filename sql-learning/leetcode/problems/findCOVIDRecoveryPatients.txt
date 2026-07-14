@@ -1,0 +1,52 @@
+# https://leetcode.com/problems/find-covid-recovery-patients/description/
+
+WITH base AS (
+    SELECT
+        p.patient_id as pid,
+        p.patient_name,
+        p.age,
+        c.test_date as positive_date,
+        c.result as positive_result
+    FROM patients as p
+    JOIN covid_tests as c ON p.patient_id = c.patient_id
+    WHERE c.result = 'Positive'
+    ORDER BY p.patient_id, c.test_date
+), r AS (
+    SELECT
+        *,
+        ROW_NUMBER() OVER(PARTITION BY pid ORDER BY positive_date) as rn
+    FROM base
+), firstr AS (
+    SELECT * FROM r WHERE rn = 1
+), base2 AS (
+    SELECT
+        *,
+        c1.test_date as negative_date,
+        c1.result as negative_result
+    FROM firstr
+    JOIN covid_tests as c1 ON pid = c1.patient_id
+    WHERE positive_result = 'Positive' AND c1.result = 'Negative' AND
+        positive_date < c1.test_date
+), base3 AS (
+    SELECT
+        *,
+        DATEDIFF(negative_date, positive_date) as diff
+    FROM base2
+    HAVING diff > 0
+), base4 AS (
+    SELECT
+        *,
+        MIN(diff) as recovery_time
+    FROM base3
+    GROUP BY pid
+)
+
+SELECT
+    pid as patient_id,
+    patient_name,
+    age,
+    recovery_time
+FROM base4
+ORDER BY recovery_time, patient_name
+
+# Other solutions
