@@ -1,0 +1,41 @@
+# https://leetcode.com/problems/find-drivers-with-improved-fuel-efficiency/description/
+
+WITH base AS (
+    SELECT
+        d.driver_id,
+        d.driver_name,
+        t.distance_km / t.fuel_consumed as efficiency,
+        t.trip_date
+    FROM trips as t
+    JOIN drivers as d ON t.driver_id = d.driver_id
+), base2 AS (
+    SELECT
+        driver_id,
+        driver_name,
+        AVG(efficiency) as first_half_avg
+    FROM base
+    WHERE MONTH(trip_date) IN (1,2,3,4,5,6)
+    GROUP BY driver_id
+), base3 AS (
+    SELECT
+        driver_id,
+        driver_name,
+        AVG(efficiency) as second_half_avg
+    FROM base
+    WHERE MONTH(trip_date) IN (7,8,9,10,11,12)
+    GROUP BY driver_id
+)
+
+SELECT
+    b.driver_id,
+    b.driver_name,
+    ROUND(b.first_half_avg,2) as first_half_avg,
+    ROUND(b1.second_half_avg,2) as second_half_avg,
+    ROUND(b1.second_half_avg - b.first_half_avg, 2) as efficiency_improvement
+FROM base2 as b
+JOIN base3 as b1 ON b.driver_id = b1.driver_id
+WHERE second_half_avg > first_half_avg
+ORDER BY efficiency_improvement DESC, driver_name;
+
+# Other solutions
+
