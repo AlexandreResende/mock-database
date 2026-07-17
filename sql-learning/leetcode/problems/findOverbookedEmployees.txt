@@ -1,0 +1,29 @@
+# https://leetcode.com/problems/find-overbooked-employees/description/
+
+WITH base AS (
+    SELECT
+        e.employee_id,
+        e.employee_name,
+        e.department,
+        YEARWEEK(meeting_date, 3) as meeting_week,
+        m.duration_hours
+    FROM employees as e
+    JOIN meetings as m ON e.employee_id = m.employee_id
+), base2 AS (
+    SELECT
+        *,
+        SUM(duration_hours) as time_on_meetings
+    FROM base
+    GROUP BY employee_id, meeting_week
+)
+
+SELECT
+    employee_id,
+    employee_name,
+    department,
+    COUNT(employee_id) as meeting_heavy_weeks
+FROM base2
+WHERE time_on_meetings > 20
+GROUP BY employee_id
+HAVING meeting_heavy_weeks > 1
+ORDER BY meeting_heavy_weeks DESC, employee_name
