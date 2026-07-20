@@ -1,0 +1,28 @@
+# https://leetcode.com/problems/human-traffic-of-stadium/description/
+
+WITH base AS (
+    SELECT * FROM Stadium WHERE people >= 100
+), base1 AS (
+    SELECT
+        *,
+        ROW_NUMBER() OVER(ORDER BY visit_date) as rn
+    FROM base
+), base2 AS (
+    SELECT
+        *,
+        id - rn as grp
+    FROM base1
+), base3 AS (
+    SELECT
+        *,
+        COUNT(*) OVER(PARTITION BY grp) as rs
+    FROM base2
+)
+
+SELECT 
+    id,
+    visit_date,
+    people
+FROM base3
+WHERE rs >= 3
+ORDER BY visit_date;
